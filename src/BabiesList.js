@@ -5,7 +5,7 @@ const BabiesList = ({names}) => {
   const [babyNames, setFilter] = useState(names.sort((a, b) => a.name.localeCompare(b.name)));
   const filter = (inputValue) => {
     state === "all" ? setFilter(names.filter(baby => baby.name.toLowerCase().includes(inputValue.toLowerCase()))) :
-      setFilter(names.filter(baby => baby.name.toLowerCase().includes(inputValue.toLowerCase()) && baby.sex === state ));
+      setFilter(names.filter(baby => baby.name.toLowerCase().includes(inputValue.toLowerCase())));
   };
   return (
     <>

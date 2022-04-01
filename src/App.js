@@ -1,15 +1,12 @@
-import babyData from './data/babyNamesData.json'
 import BabiesList from './BabiesList.js'
-import Search from './Search.js'
+import babyData from './data/babyNamesData.json'
 
 import './App.css'
-
 function App() {
   return (
     <div>
       <div className='main'>
-        <Search list/>
-        <BabiesList list={babyData} />
+        <BabiesList names={babyData}/>
       </div>
     </div>
   )

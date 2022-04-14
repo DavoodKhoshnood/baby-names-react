@@ -1,35 +1,62 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import MakeName from './MakeName'
 
 const BabiesList = ({ names }) => {
-  const [babyNames, setFilter] = useState(
-    names.sort((a, b) => a.name.localeCompare(b.name)),
-  )
-  const filter = (inputValue) => {
-    setFilter(
-      names.filter((baby) =>
-        baby.name.toLowerCase().includes(inputValue.toLowerCase()),
-      ),
-    )
-  }
+  const [list, setList] = useState([])
+  const [genderFilter, setGenderFilter] = useState('all')
+  const [search, setSearch] = useState('')
+
+  useEffect(() => {
+    setList(names.sort((a, b) => a.name.localeCompare(b.name)))
+    if (search !== '')
+      setList(
+        list.filter((baby) =>
+          baby.name.toLowerCase().includes(search.toLowerCase()),
+        ),
+      )
+}, [search, genderFilter])
+
   return (
     <>
-      <div className="content">
+      <div className="input-group">
         <input
-          className="form-control"
+          className="form-control m-2"
           type="text"
-          placeholder="Search..."
-          onChange={(e) => filter(e.target.value)}
+          placeholder="Search for a name"
+          onChange={(e) => setSearch(e.target.value)}
+        />
+        <img className={genderFilter==='all'?'line-bottom':''}
+          src="./img/baby-name-all.png"
+          alt="baby name all"
+          onClick={() => setGenderFilter('all')}
+        />
+
+        <img className={genderFilter==='f'?'line-bottom':''}
+          src="./img/baby-name-girl.png"
+          alt="baby name girl"
+          onClick={() => setGenderFilter('f')}
+        />
+
+        <img className={genderFilter==='m'?'line-bottom':''}
+          src="./img/baby-name-boy.png"
+          alt="baby name boy"
+          onClick={() => setGenderFilter('m')}
         />
       </div>
-      <div className="content">
-        {babyNames.map((baby, index) => (
-          <span key={index} className={baby.sex === 'f' ? 'girl' : 'boy'}>
-            {baby.name}
-          </span>
+      <div className="favorites" id="favorites">
+        Favorites :
+      </div>
+      <hr />
+      <div className="content" id="list">
+       {console.log('Print : '+list.length)     }
+        {list.filter((baby) => 
+        genderFilter === 'all' || baby.sex === genderFilter).map((baby, index) => (
+          <MakeName baby={baby} index={index} />
         ))}
       </div>
     </>
   )
 }
+
 
 export default BabiesList

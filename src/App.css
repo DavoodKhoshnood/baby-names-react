@@ -38,6 +38,7 @@
 }
 
 span {
+  font-size: 16px;
   padding: 8px;
   margin: 4px;
   border-radius: 5px;
@@ -62,7 +63,9 @@ span {
   padding: 8px 5PX;
 }
 
-
+input {
+  text-align: center;
+}
 
 .boy {
   background-color: #a1cfef;
@@ -70,4 +73,25 @@ span {
 
 .girl {
   background-color: #ffc7e4;
+}
+
+.favorites {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  margin: 20px;
+  font-size: 24px;
+}
+
+hr{
+  background: #d2e0fc;
+  width: 2px;
+  width: 96%;
+}
+img {
+  cursor: pointer;
+}
+
+.line-bottom {
+  border-bottom: 3px solid #336f80;
 }

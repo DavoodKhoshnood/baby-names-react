@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 
 const BabiesList = ({ names }) => {
-  const [list, setList] = useState([])
   const [genderFilter, setGenderFilter] = useState('all')
   const [search, setSearch] = useState('')
   const [favorites, setFavorites] = useState([])
@@ -14,35 +13,52 @@ const BabiesList = ({ names }) => {
     } else setFavorites([...favorites, babyName])
   }
 
+  const NameContainer = ({ data, handleClick }) => {
+    return (
+      <div className="favorites">
+        {data.map((babyName) => (
+          <MakeName baby={babyName} handleClick={handleClick} />
+        ))}
+      </div>
+    )
+  }
+
   const MakeName = ({ baby, handleClick }) => {
+    const { name, sex } = baby
     return (
       <span
-        className={baby.sex === 'f' ? 'girl' : 'boy'}
-        onClick={() => {
-          handleNameClick(baby)
-        }}
+        className={sex === 'f' ? 'girl' : 'boy'}
+        onClick={() => handleNameClick(baby)}
       >
-        {baby.name}
+        {name}
       </span>
     )
   }
 
-  useEffect(() => {
-    function loadList() {
-    setList(
-      names
-        .sort((a, b) => a.name.localeCompare(b.name))
-        .filter((baby) => !favorites.includes(baby)),
-    )
+  const filteredNames = names
+    .sort((a, z) => {
+      const nameA = a.name
+      const nameZ = z.name
+      if (nameA > nameZ) return 1
+      else if (nameA < nameZ) return -1
+      return 0
+    })
+    .filter((nameObject) => {
+      const { name, id, sex } = nameObject
+      const searchTermIsInName = name
+        .toLowerCase()
+        .includes(search.toLowerCase())
 
-    if (search !== '')
-      setList(
-        list.filter((baby) =>
-          baby.name.toLowerCase().includes(search.toLowerCase()),
-        ),
-      )}
-      loadList()
-  }, [search, genderFilter, favorites])
+      const favoriteIds = favorites.map((name) => name.id)
+      const isSelectedAsFavorite = favoriteIds.includes(id)
+
+      const sexMatchesSelectedSex =
+        genderFilter === 'all' || genderFilter === sex
+
+      return (
+        searchTermIsInName && !isSelectedAsFavorite && sexMatchesSelectedSex
+      )
+    })
 
   return (
     <>
@@ -74,21 +90,13 @@ const BabiesList = ({ names }) => {
           onClick={() => setGenderFilter('m')}
         />
       </div>
-      <div className="favorites" id="favorites">
+      <div className="favorites">
         Favorites :
-        {favorites
-          .filter((baby) => genderFilter === 'all' || baby.sex === genderFilter)
-          .map((fav) => (
-            <MakeName baby={fav} handleClick={handleNameClick} />
-          ))}
+        <NameContainer data={favorites} handleClick={handleNameClick} />
       </div>
       <hr />
-      <div className="content" id="list">
-        {list
-          .filter((baby) => genderFilter === 'all' || baby.sex === genderFilter)
-          .map((baby) => (
-            <MakeName baby={baby} handleClick={handleNameClick} />
-          ))}
+      <div className="content">
+        <NameContainer data={filteredNames} handleClick={handleNameClick} />
       </div>
     </>
   )

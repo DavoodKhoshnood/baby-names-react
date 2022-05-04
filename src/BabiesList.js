@@ -28,6 +28,7 @@ const BabiesList = ({ names }) => {
   }
 
   useEffect(() => {
+    function loadList() {
     setList(
       names
         .sort((a, b) => a.name.localeCompare(b.name))
@@ -39,7 +40,8 @@ const BabiesList = ({ names }) => {
         list.filter((baby) =>
           baby.name.toLowerCase().includes(search.toLowerCase()),
         ),
-      )
+      )}
+      loadList()
   }, [search, genderFilter, favorites])
 
   return (
